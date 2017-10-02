@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Controls";
+}
+
+<div class="container-fluid">
+    <div class="row my-3">
+        <div class="col">
+            @Html.Kendo().Button().Name("button1").Content("Default").HtmlAttributes(new { @class = "k-primary" }).Deferred()
+
+            @(Html.Kendo().Button()
+            .Name("primaryDisabledButton1")
+            .HtmlAttributes(new { @class = "k-primary" })
+            .Tag("span")
+            .Enable(false)
+            .Content("Disabled Primary Button").Deferred())
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col">
+            @(Html.Kendo().Chart()
+        .Name("chart")
+        .Theme("bootstrap-v4")
+        .Title("Gross domestic product growth \n /GDP annual %/")
+        .Legend(legend => legend
+            .Position(ChartLegendPosition.Bottom)
+        )
+        .ChartArea(chartArea => chartArea
+            .Background("transparent")
+        )
+        .SeriesDefaults(seriesDefaults =>
+            seriesDefaults.Line().Style(ChartLineStyle.Smooth)
+        )
+        .Series(series =>
+        {
+            series.Line(new double[] { 3.907, 7.943, 7.848, 9.284, 9.263, 9.801, 3.890, 8.238, 9.552, 6.855 }).Name("India");
+            series.Line(new double[] { 1.988, 2.733, 3.994, 3.464, 4.001, 3.939, 1.333, -2.245, 4.339, 2.727 }).Name("World");
+            series.Line(new double[] { 4.743, 7.295, 7.175, 6.376, 8.153, 8.535, 5.247, -7.832, 4.3, 4.3 }).Name("Russian Federation");
+            series.Line(new double[] { -0.253, 0.362, -3.519, 1.799, 2.252, 3.343, 0.843, 2.877, -5.416, 5.590 }).Name("Haiti");
+        })
+        .CategoryAxis(axis => axis
+            .Categories("2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011")
+            .MajorGridLines(lines => lines.Visible(false))
+        )
+        .ValueAxis(axis => axis
+            .Numeric().Labels(labels => labels.Format("{0}%"))
+            .Line(line => line.Visible(false))
+            .AxisCrossingValue(-10)
+        )
+        .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Format("{0}%")
+        ).Deferred()
+            )
+        </div>
+    </div>
+    <div class="row my-5">
+        <div class="col">
+            @(Html.Kendo().Grid<TelerikMvcApp10.Controllers.CarViewModel>()
+    .Name("grid")
+    .HtmlAttributes(new { style = "height: 800px;" })
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name).Width(140);
+        columns.Bound(p => p.Category).Width(140);
+        columns.Bound(p => p.InStock).Width(140);
+        columns.Bound(p => p.Discontinued).Width(100);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(172);
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create();
+    })
+    .Editable(e => e.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Filterable()
+    .Scrollable(e => e.Height(340))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+        })
+        .PageSize(10)
+        .Create(c => c.Action("Cars_Create", "Home"))
+        .Read(read => read.Action("Cars_Read", "Home").Type(HttpVerbs.Get))
+        .Update(update => update.Action("Cars_Update", "Home"))
+        .Destroy(update => update.Action("Cars_Destroy", "Home"))
+    )
+
+    .Deferred())<TelerikMvcApp10.Controllers.CarViewModel>
+        </div>
+    </div>
+</div>
+
